@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_in_Chrome__computer",
+      "mcp__Claude_in_Chrome__navigate",
+      "Bash(mkdir -p 보고서)",
+      "Bash(mkdir -p 메모)",
+      "Bash(mkdir -p 업무)",
+      "Bash(mkdir -p 기타)",
+      "Bash(mv 보고서_수정.txt 보고서/)"
+    ]
+  }
+}

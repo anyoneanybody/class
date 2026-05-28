@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>김비서 - 업무 관리 서비스</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* 라이트 모드 */
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* 다크 모드 */
+        body.dark-mode {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .toggle-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        body.dark-mode .header h1 {
+            background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        body.light-mode .intro-text {
+            color: #555;
+        }
+
+        body.dark-mode .intro-text {
+            color: #b0b0c0;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .service-card {
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-mode .service-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #333;
+        }
+
+        body.dark-mode .service-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-mode .service-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 16px 48px rgba(102, 126, 234, 0.3);
+        }
+
+        .service-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .service-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .cta-section {
+            text-align: center;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(102, 126, 234, 0.6);
+        }
+
+        .cta-button:hover:before {
+            left: 0;
+        }
+
+        body.dark-mode .cta-button {
+            background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%);
+            box-shadow: 0 12px 32px rgba(167, 139, 250, 0.4);
+        }
+
+        body.dark-mode .cta-button:before {
+            background: linear-gradient(135deg, #f472b6 0%, #a78bfa 100%);
+        }
+
+        body.dark-mode .cta-button:hover {
+            box-shadow: 0 16px 48px rgba(167, 139, 250, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .theme-toggle {
+                top: 20px;
+                right: 20px;
+            }
+
+            .toggle-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="theme-toggle">
+        <button class="toggle-btn" id="themeToggle" title="테마 전환">🌙</button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>김비서를 소개합니다</h1>
+            <p class="intro-text">업무 효율을 높이는 똑똑한 비서, 김비서와 함께 하세요.</p>
+        </div>
+
+        <div class="services">
+            <div class="service-card">
+                <h3>📋 할 일 관리</h3>
+                <p>우선순위별로 정리된 업무 목록으로 중요한 일부터 처리하세요.</p>
+            </div>
+            <div class="service-card">
+                <h3>📅 일정 확인</h3>
+                <p>주간 일정을 한눈에 보고 미팅을 빠뜨리지 마세요.</p>
+            </div>
+            <div class="service-card">
+                <h3>📊 진행률 추적</h3>
+                <p>프로젝트 진행 상황과 매출을 실시간으로 모니터링하세요.</p>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <a href="dashboard.html" class="cta-button">내 대시보드 보기 →</a>
+        </div>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // 저장된 테마 불러오기
+        const savedTheme = localStorage.getItem('theme') || 'light-mode';
+        body.className = savedTheme;
+        updateToggleIcon();
+
+        themeToggle.addEventListener('click', () => {
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark-mode');
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light-mode');
+            }
+            updateToggleIcon();
+        });
+
+        function updateToggleIcon() {
+            themeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        }
+    </script>
+</body>
+</html>
